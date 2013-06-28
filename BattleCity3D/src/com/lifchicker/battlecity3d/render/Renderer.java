@@ -55,6 +55,8 @@ public class Renderer {
         gl.glEnable(GL20.GL_DEPTH_TEST);
         gl.glEnable(GL20.GL_CULL_FACE);
 
+        drawPlayFieldCarcass();
+
         modelBatch.begin(camera);
         modelBatch.render(simulation.tank, lights);
         modelBatch.end();
@@ -62,22 +64,40 @@ public class Renderer {
         gl.glDisable(GL20.GL_CULL_FACE);
         gl.glDisable(GL20.GL_DEPTH_TEST);
 
+        drawCoordinateSystem();
+    }
+
+    private void drawCoordinateSystem() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        // x axis
         shapeRenderer.setColor(1, 0, 0, 1);
-        shapeRenderer.line(0, 0, 0, 5, 0, 0);
-        // y axis
-        shapeRenderer.setColor(0, 1, 0, 1);
-        shapeRenderer.line(0, 0, 0, 0, 5, 0);
-        // z axis
+        shapeRenderer.line(0, 0, 0, 2.0f, 0, 0);
         shapeRenderer.setColor(0, 0, 1, 1);
-        shapeRenderer.line(0, 0, 0, 0, 0, 5);
+        shapeRenderer.line(0, 0, 0, 0, 0, 2);
+        shapeRenderer.end();
+    }
+
+    private void drawPlayFieldCarcass() {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(0.2f, 0.6f, 0.2f, 1);
+
+        for (int i = (int)Simulation.PLAYFIELD_MIN_X; i < (int)Simulation.PLAYFIELD_MAX_X+1; i++)
+        {
+            shapeRenderer.line(i, 0, Simulation.PLAYFIELD_MIN_Z,
+                               i, 0, Simulation.PLAYFIELD_MAX_Z);
+        }
+
+        for (int i = (int)Simulation.PLAYFIELD_MIN_Z; i < (int)Simulation.PLAYFIELD_MAX_Z+1; i++)
+        {
+            shapeRenderer.line(Simulation.PLAYFIELD_MIN_X, 0, i,
+                               Simulation.PLAYFIELD_MAX_X, 0, i);
+        }
+
         shapeRenderer.end();
     }
 
     private void setProjectionAndCamera() {
-        camera.position.set(10, 30, -10.1f);
-        camera.lookAt(0, 0, 0);
+        camera.position.set(0.0f, 25.0f, -0.1f);
+        camera.lookAt(0.0f, 0.0f, 0.0f);
         camera.update();
         shapeRenderer.setProjectionMatrix(camera.combined);
     }

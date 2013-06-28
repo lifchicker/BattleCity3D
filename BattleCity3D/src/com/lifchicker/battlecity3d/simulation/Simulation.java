@@ -25,6 +25,10 @@ import com.badlogic.gdx.utils.Disposable;
  * @since 2013-06-26
  */
 public class Simulation implements Disposable {
+    public static final float PLAYFIELD_MIN_X = -13;
+    public static final float PLAYFIELD_MAX_X = 13;
+    public static final float PLAYFIELD_MIN_Z = -14;
+    public static final float PLAYFIELD_MAX_Z = 14;
 
     public Tank tank;
     public Model tankModel;

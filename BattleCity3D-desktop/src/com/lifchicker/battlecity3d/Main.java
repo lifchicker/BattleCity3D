@@ -11,6 +11,7 @@ public class Main {
 		cfg.width = 1024;
 		cfg.height = 768;
         cfg.vSyncEnabled = true;
+        cfg.resizable = false;
 
 		new LwjglApplication(new BattleCity3D(), cfg);
 	}
