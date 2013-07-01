@@ -13,6 +13,7 @@ package com.lifchicker.battlecity3d.simulation;
 
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -22,45 +23,69 @@ import com.badlogic.gdx.math.collision.BoundingBox;
  * @since 2013-06-27
  */
 public class Tank extends ModelInstance {
-    public static final float TANK_RADIUS = 1.0f;
-    public static final float TANK_VELOCITY = 20;
+    private float VELOCITY = 10;
 
-    private Vector2 position = new Vector2(0, 0);
+    private Vector3 position = new Vector3(0, 0, 0);
     private BoundingBox boundingBox;
+    private Vector3 newPosition = position;
+    private float rotationAngle = 0;
+    private boolean canMove = true;
 
-    public Tank(Model model) {
-        super(model);
+    public Tank(Model model, float x, float z) {
+        super(model, x, 0, z);
+
         boundingBox = new BoundingBox();
         model.calculateBoundingBox(boundingBox);
+
+        position.x = x;
+        position.y = boundingBox.max.y;
+        position.z = z;
     }
 
-    public void update (float delta, Vector2 moveDirection) {
-        float rotationAngle = 0;
-        Vector2 newPosition = new Vector2(position);
-        if (moveDirection.x < -0.00001f || moveDirection.x > 0.00001f)
-            newPosition.x += delta*TANK_VELOCITY*moveDirection.x;
-        if (moveDirection.y < -0.00001f || moveDirection.y > 0.00001f)
-            newPosition.y += delta*TANK_VELOCITY*moveDirection.y;
+    public void update (float delta) {
+        if (!(Simulation.PLAYFIELD_MIN_X < (newPosition.x - boundingBox.max.x) &&
+                (newPosition.x + boundingBox.max.x) < Simulation.PLAYFIELD_MAX_X))
+            canMove = false;
 
-        if (Simulation.PLAYFIELD_MIN_X < (newPosition.x - boundingBox.max.x) &&
-                (newPosition.x + boundingBox.max.x) < Simulation.PLAYFIELD_MAX_X)
+        if (!(Simulation.PLAYFIELD_MIN_Z < (newPosition.z - boundingBox.max.z) &&
+                (newPosition.z + boundingBox.max.z) < Simulation.PLAYFIELD_MAX_Z))
+            canMove = false;
+
+        if (canMove) {
             position.x = newPosition.x;
+            position.z = newPosition.z;
+        }
 
-        if (Simulation.PLAYFIELD_MIN_Z < (newPosition.y - boundingBox.max.z) &&
-                (newPosition.y + boundingBox.max.z)< Simulation.PLAYFIELD_MAX_Z )
-            position.y = newPosition.y;
+        transform.setToRotation(0.0f, 1.0f, 0.0f, rotationAngle);
+        transform.setTranslation(position);
+    }
 
+    public void move (float delta, Vector2 moveDirection) {
+        newPosition = new Vector3(position);
+        newPosition.x += delta * VELOCITY * moveDirection.x;
+        newPosition.z += delta * VELOCITY * moveDirection.y;
 
         if (moveDirection.x > 0.0f)
             rotationAngle = 90;
-        else if(moveDirection.x < 0.0f)
+        else if (moveDirection.x < 0.0f)
             rotationAngle = 270;
         else if (moveDirection.y > 0.0f)
             rotationAngle = 0;
         else if (moveDirection.y < 0.0f)
             rotationAngle = 180;
 
-        transform.setToRotation(0.0f, 1.0f, 0.0f, rotationAngle);
-        transform.setTranslation(new Vector3(position.x, 0, position.y));
+        canMove = true;
+    }
+
+    public void setCanMove(boolean canMove) {
+        this.canMove = false;
+    }
+
+    public boolean collide(Block block) {
+        BoundingBox blockBoundingBox = block.getBoundingBox();
+
+        return ((boundingBox.min.x + newPosition.x) < (blockBoundingBox.max.x) && ((newPosition.x + boundingBox.max.x) > blockBoundingBox.min.x)
+                && ((boundingBox.min.y + newPosition.y) < blockBoundingBox.max.y) && ((newPosition.y + boundingBox.max.y) > blockBoundingBox.min.y)
+                && ((boundingBox.min.z + newPosition.z) < blockBoundingBox.max.z) && ((newPosition.z + boundingBox.max.z) > blockBoundingBox.min.z));
     }
 }

@@ -41,8 +41,6 @@ public class GameLoop extends BattleCity3DScreen {
 
     @Override
     public void update(float delta) {
-        simulation.update(delta);
-
         if (Gdx.input.isKeyPressed(Input.Keys.Q))
             isDone = true;
 
@@ -51,25 +49,27 @@ public class GameLoop extends BattleCity3DScreen {
         boolean moveYKeyPressed = false;
 
         if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-            moveDirection.add(0.0f, 0.5f);
+            moveDirection.add(0.0f, 1.0f);
             moveXKeyPressed = !moveXKeyPressed;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-            moveDirection.add(0.0f, -0.5f);
+            moveDirection.add(0.0f, -1.0f);
             moveXKeyPressed = !moveXKeyPressed;
         }
 
         if (!moveXKeyPressed && (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) || Gdx.input.isKeyPressed(Input.Keys.A))) {
-            moveDirection.add(0.5f, 0.0f);
+            moveDirection.add(1.0f, 0.0f);
             moveYKeyPressed = !moveYKeyPressed;
         }
         if (!moveXKeyPressed && (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D))) {
-            moveDirection.add(-0.5f, 0.0f);
+            moveDirection.add(-1.0f, 0.0f);
             moveYKeyPressed = !moveYKeyPressed;
         }
 
         if (moveXKeyPressed || moveYKeyPressed)
             simulation.moveTank(delta, moveDirection);
+
+        simulation.update(delta);
     }
 
     @Override

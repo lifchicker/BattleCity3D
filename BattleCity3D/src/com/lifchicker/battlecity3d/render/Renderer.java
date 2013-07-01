@@ -31,7 +31,7 @@ public class Renderer {
     private final Matrix4 viewMatrix = new Matrix4();
     private PerspectiveCamera camera;
 
-    private Lights lights = new Lights(Color.BLACK, new DirectionalLight().set(Color.WHITE, new Vector3(0.0f, -20.f, 10.0f).nor()));
+    private Lights lights = new Lights(Color.BLACK, new DirectionalLight().set(Color.WHITE, new Vector3(0.0f, -20.f, 0.0f).nor()));
 
     private ModelBatch modelBatch;
     private ShapeRenderer shapeRenderer;
@@ -44,6 +44,7 @@ public class Renderer {
 
     public void dispose () {
         modelBatch.dispose();
+        shapeRenderer.dispose();
     }
 
     public void render (Simulation simulation, float delta) {
@@ -52,13 +53,14 @@ public class Renderer {
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         setProjectionAndCamera();
 
+        drawPlayFieldCarcass();
+
         gl.glEnable(GL20.GL_DEPTH_TEST);
         gl.glEnable(GL20.GL_CULL_FACE);
 
-        drawPlayFieldCarcass();
-
         modelBatch.begin(camera);
         modelBatch.render(simulation.tank, lights);
+        modelBatch.render(simulation.blocks, lights);
         modelBatch.end();
 
         gl.glDisable(GL20.GL_CULL_FACE);
@@ -78,7 +80,7 @@ public class Renderer {
 
     private void drawPlayFieldCarcass() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(0.2f, 0.6f, 0.2f, 1);
+        shapeRenderer.setColor(0.2f, 0.45f, 0.1f, 1);
 
         for (int i = (int)Simulation.PLAYFIELD_MIN_X; i < (int)Simulation.PLAYFIELD_MAX_X+1; i++)
         {
@@ -97,6 +99,7 @@ public class Renderer {
 
     private void setProjectionAndCamera() {
         camera.position.set(0.0f, 25.0f, -0.1f);
+        //camera.position.set(0.0f, 1.0f, -4.0f);
         camera.lookAt(0.0f, 0.0f, 0.0f);
         camera.update();
         shapeRenderer.setProjectionMatrix(camera.combined);
