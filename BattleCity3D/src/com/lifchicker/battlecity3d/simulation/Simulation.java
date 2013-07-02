@@ -124,6 +124,7 @@ public class Simulation implements Disposable {
         for (Block block : removedBlocks) {
             blocks.remove(block);
         }
+        removedBlocks.clear();
     }
 
     public void moveTank(float delta, Vector2 moveDirection) {
