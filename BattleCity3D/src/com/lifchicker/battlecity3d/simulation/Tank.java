@@ -13,7 +13,6 @@ package com.lifchicker.battlecity3d.simulation;
 
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -23,7 +22,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
  * @since 2013-06-27
  */
 public class Tank extends ModelInstance {
-    private float VELOCITY = 10;
+    private float velocity = 10;
 
     private Vector3 position = new Vector3(0, 0, 0);
     private BoundingBox boundingBox;
@@ -62,8 +61,8 @@ public class Tank extends ModelInstance {
 
     public void move (float delta, Vector2 moveDirection) {
         newPosition = new Vector3(position);
-        newPosition.x += delta * VELOCITY * moveDirection.x;
-        newPosition.z += delta * VELOCITY * moveDirection.y;
+        newPosition.x += delta * velocity * moveDirection.x;
+        newPosition.z += delta * velocity * moveDirection.y;
 
         if (moveDirection.x > 0.0f)
             rotationAngle = 90;
@@ -75,6 +74,29 @@ public class Tank extends ModelInstance {
             rotationAngle = 180;
 
         canMove = true;
+    }
+
+    public Vector3 getPosition () {
+        return new Vector3(position);
+    }
+
+    public Vector3 getDirection () {
+        Vector3 direction = new Vector3();
+        switch ((int)rotationAngle) {
+            case 0:
+                direction.z = 1.0f;
+                break;
+            case 90:
+                direction.x = 1.0f;
+                break;
+            case 180:
+                direction.z = -1.0f;
+                break;
+            case 270:
+                direction.x = -1.0f;
+                break;
+        }
+        return direction;
     }
 
     public void setCanMove(boolean canMove) {

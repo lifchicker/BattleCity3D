@@ -69,6 +69,8 @@ public class GameLoop extends BattleCity3DScreen {
         if (moveXKeyPressed || moveYKeyPressed)
             simulation.moveTank(delta, moveDirection);
 
+        if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Input.Keys.SPACE)) simulation.shot();
+
         simulation.update(delta);
     }
 

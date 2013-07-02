@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.lights.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.lights.Lights;
+import com.badlogic.gdx.graphics.g3d.lights.PointLight;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -31,7 +32,7 @@ public class Renderer {
     private final Matrix4 viewMatrix = new Matrix4();
     private PerspectiveCamera camera;
 
-    private Lights lights = new Lights(Color.BLACK, new DirectionalLight().set(Color.WHITE, new Vector3(0.0f, -20.f, 0.0f).nor()));
+    private Lights lights = new Lights(Color.BLACK, new DirectionalLight().set(Color.WHITE, new Vector3(0.0f, -5.f, 0.0f).nor()));
 
     private ModelBatch modelBatch;
     private ShapeRenderer shapeRenderer;
@@ -61,6 +62,7 @@ public class Renderer {
         modelBatch.begin(camera);
         modelBatch.render(simulation.tank, lights);
         modelBatch.render(simulation.blocks, lights);
+        modelBatch.render(simulation.shots, lights);
         modelBatch.end();
 
         gl.glDisable(GL20.GL_CULL_FACE);
@@ -71,8 +73,10 @@ public class Renderer {
 
     private void drawCoordinateSystem() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        //red - x-axis
         shapeRenderer.setColor(1, 0, 0, 1);
         shapeRenderer.line(0, 0, 0, 2.0f, 0, 0);
+        //blue - z-axis
         shapeRenderer.setColor(0, 0, 1, 1);
         shapeRenderer.line(0, 0, 0, 0, 0, 2);
         shapeRenderer.end();

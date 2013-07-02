@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.materials.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.materials.TextureAttribute;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.ArrayList;
@@ -38,6 +39,10 @@ public class Simulation implements Disposable {
     public Model tankModel;
     public ArrayList<Block> blocks = new ArrayList<>();
     public Model blockModel;
+    private ArrayList<Block> removedBlocks = new ArrayList<>();
+    public ArrayList<Shot> shots = new ArrayList<>();
+    private ArrayList<Shot> removedShots = new ArrayList<>();
+    public Model shotModel;
 
     public Simulation () {
         loadLevel();
@@ -51,21 +56,40 @@ public class Simulation implements Disposable {
         tankModel.materials.get(0).set(TextureAttribute.createDiffuse(tankTexture));
 
         blockModel = objLoader.loadModel(Gdx.files.internal("data/block.obj"));
-        ((ColorAttribute)blockModel.materials.get(0).get(ColorAttribute.Diffuse)).color.set(0.76f, 0.4f, 0.1f, 1f);
+        ((ColorAttribute)blockModel.materials.get(0).get(ColorAttribute.Diffuse)).color.set(0.76f, 0.4f, 0.1f, 1.0f);
+
+        shotModel = objLoader.loadModel(Gdx.files.internal("data/shot.obj"));
+        //shotModel.materials.get(0).set(ColorAttribute.createDiffuse(1.0f, 1.0f, 0.0f, 1f));
+        ((ColorAttribute)shotModel.materials.get(0).get(ColorAttribute.Diffuse)).color.set(1.0f, 1.0f, 0.0f, 1.0f);
+
 
         tank = new Tank(tankModel, 0, PLAYFIELD_MIN_Z+1);
 
-        blocks.add(new Block(blockModel, 0.5f, 0.5f));
-        blocks.add(new Block(blockModel, -0.5f, 0.5f));
-        blocks.add(new Block(blockModel, 0.5f, -0.5f));
+        generatePlayfield();
+    }
+
+    private void generatePlayfield () {
+        for (int i = (int) PLAYFIELD_MIN_X; i < PLAYFIELD_MAX_X; i++)
+            for (int j = (int) PLAYFIELD_MIN_Z+2; j < PLAYFIELD_MAX_Z; j++) {
+                if (Math.random() < 0.1f) {
+                    blocks.add(new Block(blockModel, i + 0.5f, j + 0.5f));
+                }
+            }
     }
 
     public void dispose() {
         tankModel.dispose();
         blockModel.dispose();
+        shotModel.dispose();
     }
 
     public void update(float delta) {
+        updateTank(delta);
+        updateShots(delta);
+        updateBlocks(delta);
+    }
+
+    private void updateTank(float delta) {
         for (Block block : blocks) {
             if (tank.collide(block)) {
                 tank.setCanMove(false);
@@ -75,7 +99,43 @@ public class Simulation implements Disposable {
         tank.update(delta);
     }
 
+    private void updateShots(float delta) {
+        removedShots.clear();
+        for (Shot shot : shots) {
+            shot.update(delta);
+
+            if (shot.isAlive())
+                for (Block block : blocks) {
+                    if (shot.collide(block)) {
+                        shot.destroy();
+                        removedBlocks.add(block);
+                    }
+                }
+
+            if (!shot.isAlive()) removedShots.add(shot);
+        }
+
+        for (Shot shot : removedShots) {
+            shots.remove(shot);
+        }
+    }
+
+    private void updateBlocks(float delta) {
+        for (Block block : removedBlocks) {
+            blocks.remove(block);
+        }
+    }
+
     public void moveTank(float delta, Vector2 moveDirection) {
         tank.move(delta, moveDirection);
+    }
+
+    public void shot() {
+        if (shots.isEmpty()) {
+            Vector3 shotPosition = tank.getPosition();
+            Vector3 shotDirection = tank.getDirection();
+            Shot newShot = new Shot(shotModel, shotPosition, shotDirection);
+            shots.add(newShot);
+        }
     }
 }
