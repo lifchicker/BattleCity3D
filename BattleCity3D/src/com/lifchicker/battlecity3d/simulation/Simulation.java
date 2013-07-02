@@ -37,9 +37,11 @@ public class Simulation implements Disposable {
 
     public Tank tank;
     public Model tankModel;
+
     public ArrayList<Block> blocks = new ArrayList<>();
-    public Model blockModel;
     private ArrayList<Block> removedBlocks = new ArrayList<>();
+    public Model blockModel;
+
     public ArrayList<Shot> shots = new ArrayList<>();
     private ArrayList<Shot> removedShots = new ArrayList<>();
     public Model shotModel;
@@ -59,7 +61,6 @@ public class Simulation implements Disposable {
         ((ColorAttribute)blockModel.materials.get(0).get(ColorAttribute.Diffuse)).color.set(0.76f, 0.4f, 0.1f, 1.0f);
 
         shotModel = objLoader.loadModel(Gdx.files.internal("data/shot.obj"));
-        //shotModel.materials.get(0).set(ColorAttribute.createDiffuse(1.0f, 1.0f, 0.0f, 1f));
         ((ColorAttribute)shotModel.materials.get(0).get(ColorAttribute.Diffuse)).color.set(1.0f, 1.0f, 0.0f, 1.0f);
 
 

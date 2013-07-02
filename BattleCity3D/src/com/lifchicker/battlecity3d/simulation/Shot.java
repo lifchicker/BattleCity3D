@@ -21,7 +21,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
  * @since 2013-07-02
  */
 public class Shot extends ModelInstance {
-    private float velocity = 10f;
+    private float velocity = 15f;
     private Vector3 position = new Vector3();
     private Vector3 direction = new Vector3();
     private float rotationAngle = 0;
