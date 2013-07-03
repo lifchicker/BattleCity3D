@@ -16,12 +16,10 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.lights.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.lights.Lights;
-import com.badlogic.gdx.graphics.g3d.lights.PointLight;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.lifchicker.battlecity3d.simulation.Simulation;
-import com.lifchicker.battlecity3d.simulation.Tank;
 
 /**
  * @author Alexey 'lh' Antonov
@@ -62,7 +60,7 @@ public class Renderer {
         modelBatch.begin(camera);
         modelBatch.render(simulation.tank, lights);
         modelBatch.render(simulation.blocks, lights);
-        modelBatch.render(simulation.shots, lights);
+        modelBatch.render(simulation.bullets, lights);
         modelBatch.end();
 
         gl.glDisable(GL20.GL_CULL_FACE);

@@ -13,7 +13,7 @@ package com.lifchicker.battlecity3d.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.lifchicker.battlecity3d.render.Renderer;
 import com.lifchicker.battlecity3d.simulation.Simulation;
 
@@ -44,25 +44,25 @@ public class GameLoop extends BattleCity3DScreen {
         if (Gdx.input.isKeyPressed(Input.Keys.Q))
             isDone = true;
 
-        Vector2 moveDirection = new Vector2(0.0f, 0.0f);
+        Vector3 moveDirection = new Vector3();
         boolean moveXKeyPressed = false;
         boolean moveYKeyPressed = false;
 
         if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-            moveDirection.add(0.0f, 1.0f);
+            moveDirection.add(0.0f, 0.0f, 1.0f);
             moveXKeyPressed = !moveXKeyPressed;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-            moveDirection.add(0.0f, -1.0f);
+            moveDirection.add(0.0f, 0.0f, -1.0f);
             moveXKeyPressed = !moveXKeyPressed;
         }
 
         if (!moveXKeyPressed && (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) || Gdx.input.isKeyPressed(Input.Keys.A))) {
-            moveDirection.add(1.0f, 0.0f);
+            moveDirection.add(1.0f, 0.0f, 0.0f);
             moveYKeyPressed = !moveYKeyPressed;
         }
         if (!moveXKeyPressed && (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D))) {
-            moveDirection.add(-1.0f, 0.0f);
+            moveDirection.add(-1.0f, 0.0f, 0.0f);
             moveYKeyPressed = !moveYKeyPressed;
         }
 

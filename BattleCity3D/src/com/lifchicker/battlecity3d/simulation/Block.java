@@ -17,25 +17,16 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 
 /**
+ * Block is not movable object.
+ * Therefore we don't need to recalculate bounding box in a world space every frame.
+ *
  * @author Alexey 'lh' Antonov
  * @since 2013-07-01
  */
-public class Block extends ModelInstance {
-    private BoundingBox boundingBox;
-
-    public Block(Model model, float x, float z) {
-        super(model);
-        boundingBox = new BoundingBox();
-        model.calculateBoundingBox(boundingBox);
-
-        Vector3 position = new Vector3(x, boundingBox.max.y, z);
-        transform.setTranslation(position);
-
-        boundingBox.min.add(position);
-        boundingBox.max.add(position);
-    }
-
-    public BoundingBox getBoundingBox() {
-        return boundingBox;
+public class Block extends GameObject {
+    public Block(Model model, Vector3 position) {
+        super(model, position);
+        boundingBox.min.add(this.position);
+        boundingBox.max.add(this.position);
     }
 }
