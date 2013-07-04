@@ -62,7 +62,7 @@ public class Simulation implements Disposable {
         ((ColorAttribute)shotModel.materials.get(0).get(ColorAttribute.Diffuse)).color.set(1.0f, 1.0f, 0.0f, 1.0f);
 
 
-        tank = new Tank(tankModel, new Vector3(0.0f, 0.0f, PLAYFIELD_MIN_Z+1), new Vector3(1.0f, 0.0f, 0.0f));
+        tank = new Tank(tankModel, new Vector3(0.0f, 0.0f, PLAYFIELD_MIN_Z+1), new Vector3(0.0f, 0.0f, 1.0f));
 
         generatePlayfield();
     }
@@ -101,17 +101,19 @@ public class Simulation implements Disposable {
     private void updateShots(float delta) {
         removedBullets.clear();
         for (Bullet bullet : bullets) {
-            bullet.update(delta);
+            bullet.move(delta);
 
-            if (bullet.isAlive())
+            if (bullet.isCanMove())
                 for (Block block : blocks) {
                     if (bullet.collide(block)) {
-                        bullet.destroy();
+                        bullet.setCanMove(false);
                         removedBlocks.add(block);
                     }
                 }
 
-            if (!bullet.isAlive()) removedBullets.add(bullet);
+            bullet.update(delta);
+
+            if (!bullet.isCanMove()) removedBullets.add(bullet);
         }
 
         for (Bullet bullet : removedBullets) {
@@ -127,7 +129,8 @@ public class Simulation implements Disposable {
     }
 
     public void moveTank(float delta, Vector3 moveDirection) {
-        tank.move(delta, moveDirection);
+        tank.setDirection(moveDirection);
+        tank.move(delta);
     }
 
     public void shot() {
