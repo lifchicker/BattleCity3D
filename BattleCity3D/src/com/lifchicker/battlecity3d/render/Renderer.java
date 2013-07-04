@@ -17,7 +17,6 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.lights.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.lights.Lights;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.lifchicker.battlecity3d.simulation.Simulation;
 
@@ -27,10 +26,11 @@ import com.lifchicker.battlecity3d.simulation.Simulation;
  */
 public class Renderer {
 
-    private final Matrix4 viewMatrix = new Matrix4();
     private PerspectiveCamera camera;
 
-    private Lights lights = new Lights(Color.BLACK, new DirectionalLight().set(Color.WHITE, new Vector3(0.0f, -5.f, 0.0f).nor()));
+    private Lights lights = new Lights(new Color(0.4f, 0.4f, 0.4f, 1.0f),
+                                       new DirectionalLight().set(new Color(0.6f, 0.6f, 0.6f, 1.0f),
+                                                                  new Vector3(0.0f, -5.0f, 0.0f).nor()));
 
     private ModelBatch modelBatch;
     private ShapeRenderer shapeRenderer;
@@ -50,7 +50,7 @@ public class Renderer {
         GLCommon gl = Gdx.gl20;
 
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        setProjectionAndCamera();
+        setProjectionAndCamera(simulation);
 
         drawPlayFieldCarcass();
 
@@ -65,8 +65,6 @@ public class Renderer {
 
         gl.glDisable(GL20.GL_CULL_FACE);
         gl.glDisable(GL20.GL_DEPTH_TEST);
-
-        drawCoordinateSystem();
     }
 
     private void drawCoordinateSystem() {
@@ -99,7 +97,7 @@ public class Renderer {
         shapeRenderer.end();
     }
 
-    private void setProjectionAndCamera() {
+    private void setProjectionAndCamera(Simulation simulation) {
         camera.position.set(0.0f, 25.0f, -0.1f);
         //camera.position.set(0.0f, 1.0f, -4.0f);
         camera.lookAt(0.0f, 0.0f, 0.0f);
