@@ -14,6 +14,8 @@ package com.lifchicker.battlecity3d.core.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector3;
+import com.lifchicker.battlecity3d.core.render.Renderer;
+import com.lifchicker.battlecity3d.core.simulation.Simulation;
 
 /**
  * @author Alexey 'lh' Antonov

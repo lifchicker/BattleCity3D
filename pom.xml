@@ -12,8 +12,11 @@
 		<gdx.version>0.9.9-SNAPSHOT</gdx.version>
 		<android.version>4.1.1.4</android.version>
 		<android.maven.version>3.6.0</android.maven.version>
+        <android.sdk.path>/home/valor/Soft/Java/android-sdk-linux</android.sdk.path>
+        <android.sdk.revision>8</android.sdk.revision>
 		<gwt.version>2.5.0</gwt.version>
 		<gwt.maven.version>2.5.0</gwt.maven.version>
+
 	</properties>
 
 	<repositories>
