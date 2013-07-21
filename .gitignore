@@ -1,2 +1,9 @@
 .idea
 libgdx-nightly-latest.zip
+.iml
+.class
+target
+.jar
+.zip
+.apk
+.dll
