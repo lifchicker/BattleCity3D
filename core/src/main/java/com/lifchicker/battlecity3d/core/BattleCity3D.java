@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.lifchicker.battlecity3d.core.screens.BattleCity3DScreen;
 import com.lifchicker.battlecity3d.core.screens.GameLoop;
+import com.lifchicker.battlecity3d.core.screens.ScreenManager;
+import com.lifchicker.battlecity3d.core.screens.Screens;
 
 
 public class BattleCity3D extends Game {
@@ -13,11 +15,14 @@ public class BattleCity3D extends Game {
 
 
     public void create() {
-        setScreen(new GameLoop());
+        ScreenManager.getInstance().initialize(this);
+        ScreenManager.getInstance().show(Screens.GAME);
         fpsLogger = new FPSLogger();
 	}
 
 	public void dispose() {
+        super.dispose();
+        ScreenManager.getInstance().dispose();
 	}
 
 	public void render() {
