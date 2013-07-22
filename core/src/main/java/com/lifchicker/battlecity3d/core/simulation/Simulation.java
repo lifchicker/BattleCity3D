@@ -50,12 +50,12 @@ public class Simulation implements Disposable {
 
     private void loadLevel() {
         ObjLoader objLoader = new ObjLoader();
-        tankModel = objLoader.loadModel(Gdx.files.internal("shot.obj"));
-        final Texture tankTexture = new Texture(Gdx.files.internal("brick_txe.png"), Pixmap.Format.RGB565, true);
+        tankModel = objLoader.loadModel(Gdx.files.internal("tank.obj"));
+        final Texture tankTexture = new Texture(Gdx.files.internal("tank.png"), Pixmap.Format.RGB565, true);
         tankTexture.setFilter(Texture.TextureFilter.MipMap, Texture.TextureFilter.Linear);
         tankModel.materials.get(0).set(TextureAttribute.createDiffuse(tankTexture));
 
-        blockModel = objLoader.loadModel(Gdx.files.internal("cube.obj")); // block
+        blockModel = objLoader.loadModel(Gdx.files.internal("block.obj")); // block
         ((ColorAttribute)blockModel.materials.get(0).get(ColorAttribute.Diffuse)).color.set(0.76f, 0.4f, 0.1f, 1.0f);
 
         shotModel = objLoader.loadModel(Gdx.files.internal("shot.obj"));
